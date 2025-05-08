@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Networking Reviewer: Subnetting & Packet Tracer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #f5f5f5;
+        }
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #2980b9;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        .section {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .example {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .analogy {
+            background-color: #e8f8f5;
+            padding: 15px;
+            border-left: 4px solid #2ecc71;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .step {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        .highlight {
+            background-color: #ffffcc;
+            padding: 2px 4px;
+        }
+        .note {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .acronym-table {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .binary {
+            font-family: monospace;
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Networking Reviewer: Subnetting & Packet Tracer</h1>
+    
+    <div class="section">
+        <h2>Acronyms in Networking</h2>
+        <table class="acronym-table">
+            <tr>
+                <th>Acronym</th>
+                <th>Full Form</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>IP</td>
+                <td>Internet Protocol</td>
+                <td>Numerical label assigned to each device connected to a network</td>
+            </tr>
+            <tr>
+                <td>CIDR</td>
+                <td>Classless Inter-Domain Routing</td>
+                <td>Method for allocating IP addresses and routing IP packets</td>
+            </tr>
+            <tr>
+                <td>PDU</td>
+                <td>Protocol Data Unit</td>
+                <td>Information that is delivered as a unit among peer entities of a network and may contain control information, address information, or data</td>
+            </tr>
+            <tr>
+                <td>PC</td>
+                <td>Personal Computer</td>
+                <td>General-purpose computer whose size, capabilities, and price make it feasible for individual use</td>
+            </tr>
+            <tr>
+                <td>SM</td>
+                <td>Subnet Mask</td>
+                <td>32-bit number used to divide an IP address into network and host portions</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Understanding IP Addressing and Subnetting</h2>
+        
+        <div class="analogy">
+            <h4>Analogy: The Postal System</h4>
+            <p>Think of IP addressing like the postal system:</p>
+            <ul>
+                <li>The Network ID is like the city name</li>
+                <li>The Subnet is like a specific neighborhood within the city</li>
+                <li>The Host ID is like the specific house address within that neighborhood</li>
+                <li>The Subnet Mask is like the postal code system that helps determine which part of the address is the city/neighborhood and which part is the specific house</li>
+            </ul>
+        </div>
+
+        <h3>IP Address Classes</h3>
+        <table>
+            <tr>
+                <th>Class</th>
+                <th>First Octet Range</th>
+                <th>Default Subnet Mask</th>
+                <th>Network Bits</th>
+                <th>Host Bits</th>
+            </tr>
+            <tr>
+                <td>Class A</td>
+                <td>1-126</td>
+                <td>255.0.0.0 (/8)</td>
+                <td>8</td>
+                <td>24</td>
+            </tr>
+            <tr>
+                <td>Class B</td>
+                <td>128-191</td>
+                <td>255.255.0.0 (/16)</td>
+                <td>16</td>
+                <td>16</td>
+            </tr>
+            <tr>
+                <td>Class C</td>
+                <td>192-223</td>
+                <td>255.255.255.0 (/24)</td>
+                <td>24</td>
+                <td>8</td>
+            </tr>
+        </table>
+
+        <div class="analogy">
+            <h4>Analogy: The Library System</h4>
+            <p>IP classes are like a library's organization system:</p>
+            <ul>
+                <li>Class A is like the main sections of the library (Fiction, Non-fiction, Reference) - few sections but each can hold many books</li>
+                <li>Class B is like the categories within each section (Mystery, Science Fiction, History) - more categories but each holds fewer books</li>
+                <li>Class C is like the specific shelves - many shelves but each can only hold a few books</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Subnet Masks and Block Sizes</h2>
+        
+        <p>A subnet mask determines which portion of an IP address refers to the network and which portion refers to hosts.</p>
+        
+        <div class="analogy">
+            <h4>Analogy: The Apartment Building</h4>
+            <p>Think of a subnet mask like an apartment numbering system:</p>
+            <ul>
+                <li>The 1's in the subnet mask are like the building and floor numbers (the network portion)</li>
+                <li>The 0's are like the individual apartment numbers on that floor (the host portion)</li>
+                <li>The more 1's you have in your subnet mask, the more buildings and floors you can have, but fewer apartments on each floor</li>
+            </ul>
+        </div>
+
+        <h3>Common Subnet Masks and Block Sizes</h3>
+        <table>
+            <tr>
+                <th>Subnet Mask</th>
+                <th>CIDR Notation</th>
+                <th>Block Size</th>
+                <th>Binary (Last Octet)</th>
+            </tr>
+            <tr>
+                <td>255.255.255.0</td>
+                <td>/24</td>
+                <td>256</td>
+                <td class="binary">00000000</td>
+            </tr>
+            <tr>
+                <td>255.255.255.128</td>
+                <td>/25</td>
+                <td>128</td>
+                <td class="binary">10000000</td>
+            </tr>
+            <tr>
+                <td>255.255.255.192</td>
+                <td>/26</td>
+                <td>64</td>
+                <td class="binary">11000000</td>
+            </tr>
+            <tr>
+                <td>255.255.255.224</td>
+                <td>/27</td>
+                <td>32</td>
+                <td class="binary">11100000</td>
+            </tr>
+            <tr>
+                <td>255.255.255.240</td>
+                <td>/28</td>
+                <td>16</td>
+                <td class="binary">11110000</td>
+            </tr>
+            <tr>
+                <td>255.255.255.248</td>
+                <td>/29</td>
+                <td>8</td>
+                <td class="binary">11111000</td>
+            </tr>
+            <tr>
+                <td>255.255.255.252</td>
+                <td>/30</td>
+                <td>4</td>
+                <td class="binary">11111100</td>
+            </tr>
+        </table>
+
+        <div class="note">
+            <p><strong>Block Size Formula:</strong> Block Size = 256 - (Last octet of subnet mask)</p>
+            <p><strong>Alternative Method:</strong> Count the number of host bits (0's) and calculate 2<sup>n</sup></p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Subnetting Step-by-Step Process</h2>
+        
+        <div class="analogy">
+            <h4>Analogy: Dividing Land</h4>
+            <p>Subnetting is like dividing a large piece of land into smaller plots:</p>
+            <ul>
+                <li>The original network is like a large estate</li>
+                <li>Subnetting is like drawing boundaries to create neighborhoods</li>
+                <li>The subnet mask determines how many neighborhoods you can create and how many houses can fit in each neighborhood</li>
+                <li>The block size determines the "size" of each neighborhood</li>
+            </ul>
+        </div>
+
+        <h3>Step-by-Step Subnetting Process</h3>
+        
+        <div class="step">
+            <h4>Step 1: Determine the subnet mask and block size</h4>
+            <ul>
+                <li>Convert CIDR notation to decimal subnet mask</li>
+                <li>Calculate block size: 256 - (last octet of subnet mask)</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <h4>Step 2: Find the network boundaries</h4>
+            <ul>
+                <li>Divide the IP space by the block size</li>
+                <li>Find which subnet range the IP belongs to</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <h4>Step 3: Calculate key addresses</h4>
+            <ul>
+                <li>Network ID: First address in the subnet range</li>
+                <li>Broadcast address: Last address in the subnet range</li>
+                <li>First usable IP: Network ID + 1</li>
+                <li>Last usable IP: Broadcast address - 1</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <h4>Step 4: Calculate subnets and hosts</h4>
+            <ul>
+                <li>Number of subnets = 2<sup>subnet bits</sup></li>
+                <li>Number of hosts per subnet = 2<sup>host bits</sup> - 2</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Subnetting Examples</h2>
+        
+        <div class="example">
+            <h3>Example 1: Finding Network Information for 192.160.1.10 /28</h3>
+            
+            <div class="step">
+                <h4>Step 1: Convert /28 to decimal subnet mask</h4>
+                <p>/28 means 28 bits are used for the network portion</p>
+                <p>Binary: <span class="binary">11111111.11111111.11111111.11110000</span></p>
+                <p>Decimal: 255.255.255.240</p>
+            </div>
+            
+            <div class="step">
+                <h4>Step 2: Calculate block size</h4>
+                <p>Block size = 256 - 240 = 16</p>
+                <p>Or: Block size = 2<sup>4</sup> = 16 (4 host bits)</p>
+            </div>
+            
+            <div class="step">
+                <h4>Step 3: Find network boundaries</h4>
+                <p>Possible networks with block size 16:</p>
+                <ul>
+                    <li>192.160.1.0</li>
+                    <li>192.160.1.16</li>
+                    <li>192.160.1.32</li>
+                    <li>192.160.1.48</li>
+                    <li>...</li>
+                </ul>
+                <p>IP 192.160.1.10 falls between 0 and 16, so it belongs to 192.160.1.0 network</p>
+            </div>
+            
+            <div class="step">
+                <h4>Step 4: Calculate key addresses</h4>
+                <p>Network ID: 192.160.1.0</p>
+                <p>Broadcast Address: 192.160.1.15 (network ID + block size - 1)</p>
+                <p>First Usable IP: 192.160.1.1 (network ID + 1)</p>
+                <p>Last Usable IP: 192.160.1.14 (broadcast - 1)</p>
+            </div>
+        </div>
+
+        <div class="example">
+            <h3>Example 2: IP Address 220.100.1.9 with prefix /29</h3>
+            
+            <div class="step">
+                <h4>Step 1: Convert /29 to decimal subnet mask</h4>
+                <p>/29 means 29 bits are used for the network portion</p>
+                <p>Binary: <span class="binary">11111111.11111111.11111111.11111000</span></p>
+                <p>Decimal: 255.255.255.248</p>
+            </div>
+            
+            <div class="step">
+                <h4>Step 2: Calculate block size</h4>
+                <p>Block size = 256 - 248 = 8</p>
+                <p>Or: Block size = 2<sup>3</sup> = 8 (3 host bits)</p>
+            </div>
+            
+            <div class="step">
+                <h4>Step 3: Find network boundaries</h4>
+                <p>Possible networks with block size 8:</p>
+                <ul>
+                    <li>220.100.1.0</li>
+                    <li>220.100.1.8</li>
+                    <li>220.100.1.16</li>
+                    <li>220.100.1.24</li>
+                    <li>...</li>
+                </ul>
+                <p>IP 220.100.1.9 falls between 8 and 16, so it belongs to 220.100.1.8 network</p>
+            </div>
+            
+            <div class="step">
+                <h4>Step 4: Calculate hosts per subnet</h4>
+                <p>Number of host bits = 32 - 29 = 3</p>
+                <p>Total hosts per subnet = 2<sup>3</sup> = 8</p>
+                <p>Usable hosts per subnet = 2<sup>3</sup> - 2 = 6</p>
+                <p>(We subtract 2 because we can't use the network ID and broadcast address as host addresses)</p>
+            </div>
+            
+            <div class="step">
+                <h4>Step 5: Calculate total subnets</h4>
+                <p>Class C base network has /24 prefix</p>
+                <p>Additional subnet bits = 29 - 24 = 5</p>
+                <p>Total subnets = 2<sup>5</sup> = 32</p>
+            </div>
+        </div>
+
+        <div class="example">
+            <h3>Example 3: Creating a subnet mask for 172.20.0.0 (900+ subnets with 50+ hosts each)</h3>
+            
+            <div class="step">
+                <h4>Step 1: Determine subnet bits needed</h4>
+                <p>Need 900+ subnets → at least 10 subnet bits (2<sup>10</sup> = 1,024)</p>
+                <p>Class B starts with first 16 bits for network</p>
+                <p>First 16 + 10 additional subnet bits = /26</p>
+            </div>
+            
+            <div class="step">
+                <h4>Step 2: Verify host requirements</h4>
+                <p>Total bits = 32</p>
+                <p>Network bits = 26</p>
+                <p>Host bits = 32 - 26 = 6</p>
+                <p>Hosts per subnet = 2<sup>6</sup> - 2 = 62</p>
+                <p>62 > 50, so this meets our requirements</p>
+            </div>
+            
+            <div class="step">
+                <h4>Step 3: Convert to subnet mask</h4>
+                <p>Binary: <span class="binary">11111111.11111111.11111111.11000000</span></p>
+                <p>Decimal: 255.255.255.192</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Packet Tracer Overview</h2>
+        
+        <div class="analogy">
+            <h4>Analogy: Network Simulation as a Virtual Lab</h4>
+            <p>Packet Tracer is like having a complete networking laboratory on your computer:</p>
+            <ul>
+                <li>It's like a "flight simulator" for network engineers</li>
+                <li>You can build and test networks without needing physical hardware</li>
+                <li>You can see how data moves through the network like watching a package delivery system</li>
+            </ul>
+        </div>
+
+        <h3>What is Packet Tracer?</h3>
+        <ul>
+            <li>A powerful network simulation program</li>
+            <li>Used to illustrate how computer networks work</li>
+            <li>Allows students to experiment with network behavior</li>
+        </ul>
+
+        <h3>Two Different Views</h3>
+        <ol>
+            <li><strong>Logical Workspace:</strong> Focus on logical connections and network design</li>
+            <li><strong>Physical Workspace:</strong> Focus on physical layout and equipment placement</li>
+        </ol>
+
+        <h3>Two Modes of Operation</h3>
+        <ol>
+            <li><strong>Real-time Mode:</strong> Network behaves as it would in real life</li>
+            <li><strong>Simulation Mode:</strong> Shows step-by-step movement of data packets through the network</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>Building Networks in Packet Tracer</h2>
+        
+        <h3>Basic Steps to Create a Simple Network</h3>
+        <ol>
+            <li>Add devices from the "End Devices" menu (like PCs)</li>
+            <li>Configure device settings (name, IP address, etc.)</li>
+            <li>Connect devices using the appropriate cables
+                <ul>
+                    <li>Straight-through cables: Connect different types of devices (PC to switch)</li>
+                    <li>Crossover cables: Connect similar devices (PC to PC)</li>
+                </ul>
+            </li>
+            <li>Test connectivity using Ping or PDU tools</li>
+        </ol>
+
+        <h3>Device Configuration Example</h3>
+        <div class="step">
+            <h4>Configuring a PC</h4>
+            <ol>
+                <li>Double-click the PC icon</li>
+                <li>Change the device name (e.g., "IT 3A")</li>
+                <li>Under Interface → FastEthernet, set IP address (e.g., 192.168.1.1)</li>
+                <li>Set subnet mask (e.g., 255.255.255.0)</li>
+            </ol>
+        </div>
+
+        <h3>Testing Network Connectivity</h3>
+        <div class="step">
+            <h4>Using the Simple PDU Tool</h4>
+            <ol>
+                <li>Click on the "Add Simple PDU" tool</li>
+                <li>Click on the source device</li>
+                <li>Click on the destination device</li>
+                <li>Check results in the bottom right corner</li>
+            </ol>
+        </div>
+
+        <h3>Simulation Mode Features</h3>
+        <ul>
+            <li><strong>Capture/Forward Button:</strong> Steps through packet transmission</li>
+            <li><strong>Reset Simulation:</strong> Restarts the simulation</li>
+            <li><strong>Back Button:</strong> Rewinds the animation</li>
+            <li><strong>Event List:</strong> Shows detailed packet information</li>
+            <li><strong>PDU List Window:</strong> Displays information about all Protocol Data Units</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Summary of Key Concepts</h2>
+        
+        <h3>Subnetting Key Formulas</h3>
+        <ul>
+            <li>Block size = 256 - (last octet of subnet mask)</li>
+            <li>Number of subnets = 2<sup>subnet bits</sup></li>
+            <li>Number of hosts per subnet = 2<sup>host bits</sup> - 2</li>
+            <li>Network ID = First address in block</li>
+            <li>Broadcast address = Last address in block (Network ID + block size - 1)</li>
+            <li>First usable IP = Network ID + 1</li>
+            <li>Last usable IP = Broadcast address - 1</li>
+        </ul>
+
+        <div class="analogy">
+            <h4>Final Analogy: The Road System</h4>
+            <p>The entire networking system is like a road system:</p>
+            <ul>
+                <li>The Internet is like the highway system connecting cities</li>
+                <li>Networks are like cities</li>
+                <li>Subnets are like neighborhoods within cities</li>
+                <li>Host addresses are like individual house addresses</li>
+                <li>Subnet masks are like the rules that define city boundaries</li>
+                <li>Packet Tracer is like a city planning simulator where you can design and test your road system before building it</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
